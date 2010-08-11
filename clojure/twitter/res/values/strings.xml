@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Twitter Magic</string>
+    <string name="public_timeline_label">Public Timeline</string>
+    <string name="about_label">About Twitter Magic</string>
+    <string name="about_title">About Twitter Magic</string>
+    <string name="public_timeline_title">Public Timeline</string>
+    <string name="no_messages">Fetching Messages</string>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="twit" default="help">
+
+  <property file="local.properties" />
+  <property file="build.properties" />
+  <property file="default.properties" />
+
+  <path id="android.antlibs">
+    <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/apkbuilder.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/jarutils.jar" />
+  </path>
+
+  <taskdef name="setup"
+           classname="com.android.ant.SetupTask"
+           classpathref="android.antlibs" />
+  <setup />
+
+  <property name="clojure-jar" location="libs/clojure.jar"/>
+  <property name="clj-android-jar" location="libs/clj-android.jar"/>
+
+  <target name="compile" depends="-resource-src, -aidl"
+          description="Compiles project's .java files into .class files">
+    <condition property="extensible.classpath"
+               value="${tested.project.absolute.dir}/bin/classes" else=".">
+      <isset property="tested.project.absolute.dir" />
+    </condition>
+    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+           destdir="${out.classes.absolute.dir}"
+           bootclasspathref="android.target.classpath"
+           verbose="${verbose}" classpath="${extensible.classpath}">
+      <src path="${source.absolute.dir}" />
+      <src path="${gen.absolute.dir}" />
+      <classpath>
+        <fileset dir="${external.libs.absolute.dir}" includes="*.jar" />
+      </classpath>
+    </javac>
+
+    <echo>${extensible.classpath}:${source.absolute.dir}</echo>
+    <java classname="clojure.lang.Compile"
+          classpathref="android.target.classpath"
+          classpath="${clojure-jar}:${clj-android-jar}:${extensible.classpath}:${source.absolute.dir}:${out.classes.absolute.dir}">
+      <sysproperty key="clojure.compile.path" value="${out.classes.absolute.dir}"/>
+      <arg value="com.abedra.twitter"/>
+      <arg value="com.abedra.twit"/>
+    </java>
+  </target>
+
+</project>
